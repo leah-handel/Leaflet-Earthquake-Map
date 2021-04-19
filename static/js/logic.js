@@ -47,20 +47,20 @@ d3.json(earthquakeURL).then(function(data) {
             fillColor: color,
             radius: 10000*magnitude
           })
-          .bindPopup(quake.properties.place);
+          .bindPopup(`<strong>Location:</strong> ${quake.properties.place}`);
 
           markers.push(marker);
     });
-    
-    console.log(markers);
+
 
     var markerLayer = L.layerGroup(markers)
 
     map.addLayer(markerLayer);
 
-    // legend: https://codepen.io/haakseth/pen/KQbjdO
+    // legend template: https://codepen.io/haakseth/pen/KQbjdO
 
     var legend = L.control({ position: "bottomleft" });
+
 
     legend.onAdd = function(map) {
     var div = L.DomUtil.create("div", "legend");
@@ -70,11 +70,9 @@ d3.json(earthquakeURL).then(function(data) {
     div.innerHTML += '<span><i class="bi bi-circle-fill" style="color: #DC267F"></i> &nbsp;&nbsp; 10 - 20</span><br>';
     div.innerHTML += '<span><i class="bi bi-circle-fill" style="color: #FE6100"></i> &nbsp;&nbsp; 20 - 50</span><br>';
     div.innerHTML += '<span><i class="bi bi-circle-fill" style="color: #FFB000"></i> &nbsp;&nbsp; 50 +</span><br>';
-    //div.innerHTML += '<i class="icon" style="background-image: url(https://d30y9cdsu7xlg0.cloudfront.net/png/194515-200.png);background-repeat: no-repeat;"></i><span>Grænse</span><br>';
-  
+    
     return div;
     };
 
     legend.addTo(map);
 });
-
