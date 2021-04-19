@@ -24,10 +24,12 @@ d3.json(earthquakeURL).then(function(data) {
 
         var depth = coordinates [2];
 
-        var color = "#648FFF";
+        // accessible color scheme from https://davidmathlogic.com/colorblind/#%23648FFF-%23785EF0-%23DC267F-%23FE6100-%23FFB000
+
+        var color = "#FFB000";
 
         if (depth < 5) {
-            color = "#FFB000";
+            color = "#648FFF";
         } else if (depth < 10) {
             color = "#785EF0";
         } else if (depth < 20) {
@@ -56,4 +58,23 @@ d3.json(earthquakeURL).then(function(data) {
 
     map.addLayer(markerLayer);
 
+    // legend: https://codepen.io/haakseth/pen/KQbjdO
+
+    var legend = L.control({ position: "bottomleft" });
+
+    legend.onAdd = function(map) {
+    var div = L.DomUtil.create("div", "legend");
+    div.innerHTML += "<h4>Earthquake Depth</h4>";
+    div.innerHTML += '<span><i class="bi bi-circle-fill" style="color: #648FFF"></i> &nbsp;&nbsp; &lt; 5 </span><br>';
+    div.innerHTML += '<span><i class="bi bi-circle-fill" style="color: #785EF0"></i> &nbsp;&nbsp; 5 - 10</span><br>';
+    div.innerHTML += '<span><i class="bi bi-circle-fill" style="color: #DC267F"></i> &nbsp;&nbsp; 10 - 20</span><br>';
+    div.innerHTML += '<span><i class="bi bi-circle-fill" style="color: #FE6100"></i> &nbsp;&nbsp; 20 - 50</span><br>';
+    div.innerHTML += '<span><i class="bi bi-circle-fill" style="color: #FFB000"></i> &nbsp;&nbsp; 50 +</span><br>';
+    //div.innerHTML += '<i class="icon" style="background-image: url(https://d30y9cdsu7xlg0.cloudfront.net/png/194515-200.png);background-repeat: no-repeat;"></i><span>Grænse</span><br>';
+  
+    return div;
+    };
+
+    legend.addTo(map);
 });
+
