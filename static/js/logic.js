@@ -9,10 +9,20 @@ var map = L.map("map", {
       attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
   }).addTo(map);
 
-var earthquakeURL = "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_week.geojson"
+var earthquakeURL = "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_week.geojson";
+var platesURL = "static/data/PB2002_boundaries.json";
 
-d3.json(earthquakeURL).then(function(data) {
-    var quakes = data.features;
+var promises = [];
+
+promises.push(d3.json(earthquakeURL));
+promises.push(d3.json(platesURL));
+
+Promise.all(promises).then(function(data) {
+    var quakes = data[0].features;
+    var plates = data[1];
+
+    console.log(quakes);
+    console.log(plates);
 
     var markers = [];
 
@@ -57,6 +67,8 @@ d3.json(earthquakeURL).then(function(data) {
 
     map.addLayer(markerLayer);
 
+    
+
     // legend template: https://codepen.io/haakseth/pen/KQbjdO
 
     var legend = L.control({ position: "bottomleft" });
@@ -75,4 +87,6 @@ d3.json(earthquakeURL).then(function(data) {
     };
 
     legend.addTo(map);
+
+
 });
