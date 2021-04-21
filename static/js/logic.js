@@ -19,7 +19,7 @@ promises.push(d3.json(platesURL));
 
 Promise.all(promises).then(function(data) {
     var quakes = data[0].features;
-    var plates = data[1];
+    var plates = data[1].features;
 
     console.log(quakes);
     console.log(plates);
@@ -67,7 +67,13 @@ Promise.all(promises).then(function(data) {
 
     map.addLayer(markerLayer);
 
-    
+    var plateStyle = {
+        "color": "red",
+        "weight": 2,
+        "opacity": .75
+    };
+
+    var platesLayer = L.geoJSON(plates, {style: plateStyle}).addTo(map);
 
     // legend template: https://codepen.io/haakseth/pen/KQbjdO
 
