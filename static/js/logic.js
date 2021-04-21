@@ -1,13 +1,19 @@
-var map = L.map("map", {
-    center: [40, -115],
-    zoom: 5
-  });
+
   
   // Adding a tile layer (the background map image) to our map:
   // We use the addTo() method to add objects to our map.
-  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+  var street = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-  }).addTo(map);
+  });
+
+  var topo = L.tileLayer('https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png', {
+    attribution: 'Map data: &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, <a href="http://viewfinderpanoramas.org">SRTM</a> | Map style: &copy; <a href="https://opentopomap.org">OpenTopoMap</a> (<a href="https://creativecommons.org/licenses/by-sa/3.0/">CC-BY-SA</a>)'
+  });
+
+  var baseMaps = {
+    "Street Map": street,
+    "Topographic Map": topo
+  };
 
 var earthquakeURL = "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_week.geojson";
 var platesURL = "static/data/PB2002_boundaries.json";
@@ -65,7 +71,7 @@ Promise.all(promises).then(function(data) {
 
     var markerLayer = L.layerGroup(markers)
 
-    map.addLayer(markerLayer);
+    //map.addLayer(markerLayer);
 
     var plateStyle = {
         "color": "red",
@@ -73,12 +79,26 @@ Promise.all(promises).then(function(data) {
         "opacity": .75
     };
 
-    var platesLayer = L.geoJSON(plates, {style: plateStyle}).addTo(map);
+    var platesLayer = L.geoJSON(plates, {style: plateStyle});
+
+    var overlayMaps = {
+        "Earthquakes": markerLayer,
+        "Tectonic Plates": platesLayer
+      };
+
+    var map = L.map("map", {
+        center: [40, -115],
+        zoom: 5,
+        layers: [street, markerLayer]
+    });
+
+    L.control.layers(baseMaps, overlayMaps, {
+        collapsed: false
+      }).addTo(map);
 
     // legend template: https://codepen.io/haakseth/pen/KQbjdO
 
     var legend = L.control({ position: "bottomleft" });
-
 
     legend.onAdd = function(map) {
     var div = L.DomUtil.create("div", "legend");
