@@ -9,7 +9,7 @@ html {
   height: 100%;
 }
 
-/* legend template: https://codepen.io/haakseth/pen/KQbjdO */
+/* legend css from: https://codepen.io/haakseth/pen/KQbjdO */
 
 .legend {
   padding: 6px 8px;
@@ -27,8 +27,4 @@ html {
 .legend span {
   position: relative;
   bottom: 3px;
-}
-
-.bi{
-  outline-color: black;
 }

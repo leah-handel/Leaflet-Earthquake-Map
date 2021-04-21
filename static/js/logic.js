@@ -1,7 +1,5 @@
+// base map tile layers
 
-  
-  // Adding a tile layer (the background map image) to our map:
-  // We use the addTo() method to add objects to our map.
   var street = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
   });
@@ -15,6 +13,8 @@
     "Topographic Map": topo
   };
 
+// data sources
+
 var earthquakeURL = "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_week.geojson";
 var platesURL = "static/data/PB2002_boundaries.json";
 
@@ -27,8 +27,7 @@ Promise.all(promises).then(function(data) {
     var quakes = data[0].features;
     var plates = data[1].features;
 
-    console.log(quakes);
-    console.log(plates);
+    // creating marker layer with quake data
 
     var markers = [];
 
@@ -57,13 +56,13 @@ Promise.all(promises).then(function(data) {
         var magnitude = quake.properties.mag;
 
         var marker = L.circle(location, {
-            fillOpacity: 0.9,
-            color: "black",
+            fillOpacity: 0.8,
+            color: color,
             weight: 1,
             fillColor: color,
-            radius: 10000*magnitude
+            radius: 15000*magnitude
           })
-          .bindPopup(`<strong>Location:</strong> ${quake.properties.place}`);
+          .bindPopup(`<h4>Earthquake ${quake.properties.place}</h4><hr><strong>Magnitude:</strong> ${magnitude}<br><strong>Depth:</strong> ${depth}`);
 
           markers.push(marker);
     });
@@ -71,7 +70,7 @@ Promise.all(promises).then(function(data) {
 
     var markerLayer = L.layerGroup(markers)
 
-    //map.addLayer(markerLayer);
+    // creating tectonic plate layer
 
     var plateStyle = {
         "color": "red",
@@ -81,15 +80,17 @@ Promise.all(promises).then(function(data) {
 
     var platesLayer = L.geoJSON(plates, {style: plateStyle});
 
+    // layer control
+
     var overlayMaps = {
         "Earthquakes": markerLayer,
         "Tectonic Plates": platesLayer
       };
 
     var map = L.map("map", {
-        center: [40, -115],
-        zoom: 5,
-        layers: [street, markerLayer]
+        center: [50, -125],
+        zoom: 4,
+        layers: [street, platesLayer, markerLayer]
     });
 
     L.control.layers(baseMaps, overlayMaps, {
