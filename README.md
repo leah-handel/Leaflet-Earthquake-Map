@@ -1,5 +1,7 @@
 # Leaflet Earthquake Map
 
+<img width="959" alt="screenshot" src="https://user-images.githubusercontent.com/74382969/116956188-3b7cc980-ac5a-11eb-9240-db4bb86d076c.png">
+
 ## General Info
 
 This project maps earthquakes recorded by the USGS in the past 7 days, along with tectonic plate boundaries. Use the map controls in the top right corner to switch between street and topographical basemaps, and to add or remove earthquake and plate layers.
